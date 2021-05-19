@@ -1,8 +1,9 @@
 #include <iostream>
 #include <cmath>
-#include <conio.h>
 #include <vector>
 #include "Gaussian.h"
+#include "ProfileMatrix.h"
+#include "MatrixGenerator.h"
 using namespace std;
 
 int main() {
@@ -22,6 +23,10 @@ int main() {
         cin >> x;
         v.emplace_back(x);
     }
+
+    ProfileMatrix temp = MatrixGenerator::convert2profile(mas);
+
+
 
     Gaussian gaussian = Gaussian(mas, v);
     gaussian.evaluate();
