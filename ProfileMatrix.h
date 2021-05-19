@@ -2,6 +2,8 @@
 // Created by Сергей on 18.05.2021.
 //
 #include <vector>
+#include <fstream>
+#include <string>
 #ifndef LU_DECOMPOSITION_AND_THE_GAUSSIAN_METHOD_PROFILEMATRIX_H
 #define LU_DECOMPOSITION_AND_THE_GAUSSIAN_METHOD_PROFILEMATRIX_H
 
@@ -17,8 +19,9 @@ public:
         this-> au = au;
     }
     std::vector<double> getDiagonal();
-    std::vector<std::vector<double>> GetAi();
-    std::vector<std::vector<double>> GetAu();
+    std::vector<std::vector<double>> getAi();
+    std::vector<std::vector<double>> getAu();
+    void printMatrix(const std::string &path);
 
 };
 

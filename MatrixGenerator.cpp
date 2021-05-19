@@ -6,33 +6,41 @@
 #include <ctime>
 #include <cmath>
 const int RANDOM_NUMBER = 5;
+const int DEFAULT_NUMBER = 100;
 
 
-void MatrixGenerator::createMatrix() {
+ProfileMatrix MatrixGenerator::createMatrix(bool flag) {
+    std::vector<std::vector<double>>result;
     srand(time(nullptr));
-    int sum = 0;
-    matrix.resize(n);
+    result.resize(n);
     for (int i = 0; i < n; i++) {
-        matrix[i].resize(n);
+        result[i].resize(n);
     }
+    if (flag) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                result[i][j] = rand() % DEFAULT_NUMBER;
+            }
+        }
+        return MatrixGenerator::convert2profile(result);
+    }
+    int sum = 0;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (i == j) continue;
-            matrix[i][j] = -rand() % RANDOM_NUMBER;
-            sum += -matrix[i][j];
+            result[i][j] = -rand() % RANDOM_NUMBER;
+            sum += -result[i][j];
         }
     }
     for (int i = 0; i < n; i++) {
-        matrix[i][i] = sum;
+        result[i][i] = sum;
     }
-    matrix[0][0] += pow(10, -k);
+    result[0][0] += pow(10, -k);
+    return MatrixGenerator::convert2profile(result);
 }
 
-std::vector<std::vector<double>> MatrixGenerator::getMatrix() {
-    return matrix;
-}
 
-ProfileMatrix MatrixGenerator::convert2profile(const std::vector<std::vector<double>> &v) {
+ProfileMatrix MatrixGenerator::convert2profile(std::vector<std::vector<double>> v) {
     std::vector<double>diagonal;
     std::vector<std::vector<double>> ai, au;
     for (int i = 0; i < v.size(); i++) {
@@ -62,6 +70,36 @@ ProfileMatrix MatrixGenerator::convert2profile(const std::vector<std::vector<dou
         au.push_back(temp);
     }
     return ProfileMatrix(diagonal, ai, au);
+}
+
+std::vector<std::vector<double>> MatrixGenerator::profile2normal(ProfileMatrix matrix) {
+    int n = matrix.getDiagonal().size();
+    std::vector<double> d = matrix.getDiagonal();
+    std::vector<std::vector<double>> ai = matrix.getAi();
+    std::vector<std::vector<double>> au = matrix.getAu();
+    std::vector<std::vector<double>> result(n, std::vector<double>(n));
+    for (int i = 0; i < n; i++) {
+        result[i][i] = d[i];
+    }
+    for (int i = 0; i < n; i++) {
+        int j = 0;
+        while (j < i && i - j > ai[i].size()) {
+            result[i][j] = 0;
+        }
+        for (int t = 0; t < ai[i].size(); t++) {
+            result[i][j + t] = ai[i][t];
+        }
+    }
+    for (int j = 0; j < n; j++) {
+        int i = 0;
+        while (i < j && j - i > au[j].size()) {
+            result[i][j] = 0;
+        }
+        for (int t = 0; t < au[j].size(); t++) {
+            result[i + t][j] = au[j][t];
+        }
+    }
+    return result;
 }
 
 

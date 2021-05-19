@@ -13,21 +13,16 @@ class MatrixGenerator {
 private:
     int n;
     int k;
-    std::vector<std::vector<double>> matrix;
-
-    void createMatrix();
-
 public:
 
     MatrixGenerator(int n, int k) {
         this->n = n;
         this->k = k;
-        createMatrix();
     }
 
-
-    static ProfileMatrix convert2profile(const std::vector<std::vector<double>> &v);
-    std::vector<std::vector<double>> getMatrix();
+    ProfileMatrix createMatrix(bool flag);
+    static ProfileMatrix convert2profile(std::vector<std::vector<double>> v);
+    static std::vector<std::vector<double>> profile2normal(ProfileMatrix matrix);
 
 
 
